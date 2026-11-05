@@ -10,3 +10,11 @@ export function createClaimsClient(fetchClaim, {now=Date.now, ttlMs=30000} = {})
     return value;
   }};
 }
+
+// Returns {customerCode, status} using the client's per-customer cache.
+// Caller must enforce owner authorization before calling. Do not log the result.
+export async function getCustomerStatus(client, customerCode) {
+  const code=normalizeCustomerCode(customerCode);
+  const status=await client.get(code);
+  return {customerCode: code, status};
+}
